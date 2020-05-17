@@ -30,6 +30,7 @@ import torchvision
 from torchvision import datasets, models, transforms
 import time
 import os
+import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import copy
 from mpl_toolkits.axes_grid1 import ImageGrid
@@ -78,6 +79,7 @@ model.eval()
 listOfImages=getAllImagesFromInputImagesDir(IMAGEDIR,True)
 print(listOfImages)
 
+
 #Loops through our input images directory and displays the predicted classes and their feature maps:
 for filename in listOfImages:
   print("Running current image:"+filename)
@@ -120,13 +122,16 @@ for filename in listOfImages:
   #Applies a color to each found class within our final image:
   npimagearray_finalimage.putpalette(colors)
 
-  #Displaying our final image:
+  #Displaying our actual image and our predicted classes final image:
+  plt.axis('off')
+  actualimg = mpimg.imread(filename)
+  plt.imshow(actualimg)
+  plt.show()
   plt.axis('off')
   plt.imshow(npimagearray_finalimage)
 
   #Showcases our 21 feature maps in a single grid image:------
   _, axs = plt.subplots(5, 5, figsize=(6, 6))
-  plt.axis('off')
   axs = axs.flatten()
   #Turns off the axis' for every tile:
   for i in axs:
@@ -140,4 +145,4 @@ for filename in listOfImages:
       i+=1
   plt.subplots_adjust(wspace=.01, hspace=.01)
   plt.show(block=True)
-  #-----------------------------------------------------------  #-----------------------------------------------------------
+  #-----------------------------------------------------------
