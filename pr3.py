@@ -40,7 +40,7 @@ from torchvision import transforms
 print("main")
 
 #PATHS---------------
-IMAGEDIR = "./"
+IMAGEDIR = "./INPUT_IMAGES"
 filename = '/content/dog_people_tv_livingroom.jpg'
 
 #Takes a path directory (string) and checks for all images in that directory
