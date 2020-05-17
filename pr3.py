@@ -18,8 +18,7 @@ the fcn_resnet50 function.
  the feature maps in 1 image (as tiles).•Create the final segmentation image such that each color represents 1 class.•You might need to try different input sizes to get the best segmentation.   4.Write a paragraph about the feature maps.5.Submit your code along with a PDF file containing images, feature maps, final segmentation, and a paragraph writeup.
 '''
 
-#NOTE: THIS WILL MOST LIKELY ONLY WORK ON A GPU MACHINE (use on google colab)
-
+#Part 1:import modules
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -40,17 +39,14 @@ from torchvision import transforms
 print("main")
 
 #PATHS---------------
-IMAGEDIR = "./INPUT_IMAGES"
-filename = '/content/dog_people_tv_livingroom.jpg'
+IMAGEDIR = "./INPUT_IMAGES/"
 
 #Takes a path directory (string) and checks for all images in that directory
 #Returns a list of image paths (list of strings)
 def getAllImagesFromInputImagesDir(path:str, getabspaths=True):
     listOfImagePaths = []
-
     if (path[0] == '.' and getabspaths):
         path = os.getcwd() + path[1:path.__len__()]
-
 
     # read the entries
     with os.scandir(path) as listOfEntries:
@@ -78,10 +74,14 @@ model = torch.hub.load('pytorch/vision:v0.6.0', 'fcn_resnet101', pretrained=True
 model.eval()
 #print(model.eval())
 
-listOfImages=getAllImagesFromInputImagesDir(IMAGEDIR,False)
+#Gets a list of images from our image directory:
+listOfImages=getAllImagesFromInputImagesDir(IMAGEDIR,True)
 print(listOfImages)
 
+#Loops through our input images directory and displays the predicted classes and their feature maps:
 for filename in listOfImages:
+  print("Running current image:"+filename)
+
   #Loading our image:
   input_image = Image.open(filename)
   preprocess = transforms.Compose([
@@ -102,7 +102,7 @@ for filename in listOfImages:
   #Gets the output of our res model:
   with torch.no_grad():
       output = model(input_batch)['out'][0] #Our 21 feature maps
-      print(len(output)) #Has a length of 21 for our 21 feature maps
+      #print(len(output)) #Has a length of 21 for our 21 feature maps
 
   #Gets the best output image:
   final_predicted_classes_image = output.argmax(0)
@@ -140,4 +140,4 @@ for filename in listOfImages:
       i+=1
   plt.subplots_adjust(wspace=.01, hspace=.01)
   plt.show(block=True)
-  #-----------------------------------------------------------
+  #-----------------------------------------------------------  #-----------------------------------------------------------
